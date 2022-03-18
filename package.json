@@ -14,11 +14,9 @@
         "clear": "^0.1.0",
         "less": "^4.1.2",
         "less-loader": "^10.2.0",
-        "mockjs": "^1.1.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "vite": "^2.8.6",
-        "vite-plugin-html": "^3.2.0",
-        "vite-plugin-mock": "^2.9.6"
+        "vite-plugin-html": "^3.2.0"
     }
 }

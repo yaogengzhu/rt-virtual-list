@@ -1,13 +1,14 @@
+import { data } from './mock'
 import './index.less'
 const App = () => {
-    const list = Array.from({ length: 100 }, (_, index) => index + 1)
-    return (
-        <ul>
-            {list.map((item, index) => (
-                <li key={index}>{item}</li>
-            ))}
-        </ul>
-    )
+	const { list } = data
+	return (
+		<ul>
+			{ list.map((item) => (
+				<li key={ item.id }>{ item.title }</li>
+			)) }
+		</ul>
+	)
 }
 
 export default App
