@@ -1,7 +1,6 @@
-import React from 'react'
+import React,{ useRef,useEffect } from 'react'
 import { data } from './mock'
 import './index.less'
-
 
 type IItem = {
 	title: string
@@ -27,20 +26,48 @@ const Item: React.FC<IItem> = (props) => {
 }
 const App = () => {
 	const { list } = data
-	console.log(list)
+	const domRef = useRef()
+	const computedDevicesHight = () => {
+		const dom = domRef.current
+		if (dom) {
+			console.log(dom.offsetHeight,'dom.offsetHeight ')
+			// 计算一个屏幕可以放下多少
+			console.log(~~(dom.offsetHeight / 100) + 2)
+		}
+	}
+
+	const onScroll = () => {
+		const dom = domRef.current
+		if (dom) {
+			console.log(dom.scrollTop,'xxx')
+		}
+
+	}
+
+	useEffect(() => {
+		computedDevicesHight()
+		const dom = domRef.current
+		if (dom) {
+			console.log(dom)
+			dom.addEventListener('scroll',onScroll,{
+				passive: true,
+			})
+		}
+		window.addEventListener('resize',computedDevicesHight)
+		return () => {
+			window.removeEventListener('resize',computedDevicesHight)
+		}
+	},[])
 	return (
-		<div>
-			{
-				list.map(item => (
-					<Item key={ item.id } { ...item } />
-				))
-			}
+		<div className="wrapper">
+			<div className="scrollContainer" ref={ domRef }>
+				{
+					list.map(item => (
+						<Item key={ item.id } { ...item } />
+					))
+				}
+			</div>
 		</div>
-		// <ul>
-		// 	{ list.map((item) => (
-		// 		<li key={ item.id }>{ item.title }</li>
-		// 	)) }
-		// </ul>
 	)
 }
 
