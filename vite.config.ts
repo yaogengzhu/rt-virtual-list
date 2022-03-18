@@ -20,6 +20,14 @@ export default defineConfig({
         }),
     ], // 配置需要使用的插件列表
     base: './', // 在生产中服务时的基本公共路径。
+    css: {
+        // css预处理器
+        preprocessorOptions: {
+            less: {
+                charset: false,
+            },
+        },
+    },
     server: {
         host: 'localhost', // 指定服务器主机名
         port: 3000, // 指定服务器端口

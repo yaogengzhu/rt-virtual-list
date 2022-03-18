@@ -1,3 +1,4 @@
+import './index.less'
 const App = () => {
     const list = Array.from({ length: 100 }, (_, index) => index + 1)
     return (
