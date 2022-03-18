@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import { viteMockServe } from 'vite-plugin-mock'
 
 export default defineConfig({
     plugins: [
@@ -17,6 +18,9 @@ export default defineConfig({
              * @default index.html
              */
             template: 'public/index.html',
+        }),
+        viteMockServe({
+            mockPath: 'mock',
         }),
     ], // 配置需要使用的插件列表
     base: './', // 在生产中服务时的基本公共路径。
