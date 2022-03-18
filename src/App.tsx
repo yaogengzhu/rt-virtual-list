@@ -25,21 +25,36 @@ const Item: React.FC<IItem> = (props) => {
 	)
 }
 const App = () => {
-	const { list } = data
+	const startIndex = useRef(0) // 记录当前滚动的第一个数据的索引
+	const endIndex = useRef(0) // 记录滚动页面的最后一个数据索引
+	const domHeight = 100 // item 固定高度
+	const itemSize = useRef(0) // 当前页面可以放置多少个item
+	const deviceHeight = useRef(0) //
 	const domRef = useRef()
+	const { list } = data
 	const computedDevicesHight = () => {
 		const dom = domRef.current
 		if (dom) {
 			console.log(dom.offsetHeight,'dom.offsetHeight ')
-			// 计算一个屏幕可以放下多少
-			console.log(~~(dom.offsetHeight / 100) + 2)
+			deviceHeight.current = dom.offsetHeight
+			// 计算一个屏幕可以放下多少item
+			itemSize.current = (~~(dom.offsetHeight / domHeight) + 2)
 		}
 	}
 
 	const onScroll = () => {
 		const dom = domRef.current
 		if (dom) {
-			console.log(dom.scrollTop,'xxx')
+			const scrollTop = dom.scrollTop //页面滚动的高度
+			startIndex.current = ~~(scrollTop / domHeight)
+			endIndex.current = startIndex.current + itemSize.current
+			// endIndex 需要进行判断
+			if (!list[ endIndex.current ]) {
+				endIndex.current = list.length - 1
+			}
+
+			console.log(endIndex.current,'xx')
+			console.log(startIndex.current,'xx')
 		}
 
 	}
