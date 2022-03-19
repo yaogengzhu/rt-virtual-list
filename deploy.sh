@@ -4,7 +4,7 @@
 set -e
 
 # git 
-git add .
+git add -A
 git commit -m 'deploy'
 
 # 构建
