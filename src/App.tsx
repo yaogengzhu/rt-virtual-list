@@ -1,4 +1,4 @@
-import React,{ useRef,useEffect,useMemo } from 'react'
+import React,{ useRef,useEffect,useMemo,useState } from 'react'
 import { data } from './mock'
 import './index.less'
 
@@ -25,8 +25,8 @@ const Item: React.FC<IItem> = (props) => {
 	)
 }
 const App = () => {
-	const startIndex = useRef(0) // 记录当前滚动的第一个数据的索引
-	const endIndex = useRef(0) // 记录滚动页面的最后一个数据索引
+	const [ startIndex,setStartIndex ] = useState(0)
+	const [ endIndex,setEndIndex ] = useState(0)
 	const domHeight = 100 // item 固定高度
 	const itemSize = useRef(0) // 当前页面可以放置多少个item
 	const deviceHeight = useRef(0) //
@@ -35,10 +35,11 @@ const App = () => {
 	const computedDevicesHight = () => {
 		const dom = domRef.current
 		if (dom) {
-			console.log(dom.offsetHeight,'dom.offsetHeight ')
 			deviceHeight.current = dom.offsetHeight
 			// 计算一个屏幕可以放下多少item
-			itemSize.current = (~~(dom.offsetHeight / domHeight) + 2)
+			const items = (~~(dom.offsetHeight / domHeight) + 2)
+			itemSize.current = items
+			console.log(items, 'items')
 		}
 	}
 
@@ -46,16 +47,38 @@ const App = () => {
 		const dom = domRef.current
 		if (dom) {
 			const scrollTop = dom.scrollTop //页面滚动的高度
-			startIndex.current = ~~(scrollTop / domHeight)
-			endIndex.current = startIndex.current + itemSize.current
+			const s1 = ~~(scrollTop / domHeight)
+			const s2 = s1 + itemSize.current
+			setStartIndex(s1)
 			// endIndex 需要进行判断
-			if (!list[ endIndex.current ]) {
-				endIndex.current = list.length
+			if (list[ s2 ]) {
+				setEndIndex(s2)
+			} else {
+				setEndIndex(list.length)
 			}
-			console.log(startIndex.current,endIndex.current)
 		}
 
 	}
+
+	/**
+	 * init page
+	 */
+	useEffect(() => {
+		const dom = domRef.current
+		if (dom) {
+			deviceHeight.current = dom.offsetHeight
+			// 计算一个屏幕可以放下多少item
+			const items = (~~(dom.offsetHeight / domHeight) + 2)
+			itemSize.current = items
+			setStartIndex(0)
+			// 如果 list[items] 存在则
+			if (list[ items ]) {
+				setEndIndex(items)
+			} else {
+				setEndIndex(list.length)
+			}
+		}
+	},[])
 
 	useEffect(() => {
 		computedDevicesHight()
@@ -72,27 +95,30 @@ const App = () => {
 		}
 	},[])
 
-	useEffect(() => {
-		startIndex.current = 0
-		endIndex.current = itemSize.current
-		console.log(itemSize.current,'domRef')
-	},[ domRef.current ])
-
 	const virtualList = useMemo(() => {
-		console.log(list,'list')
-		console.log(startIndex.current,endIndex.current,'vi')
-		return list.slice(startIndex.current,endIndex.current)
-	},[ startIndex.current, endIndex.current ])
+		console.log(startIndex,endIndex)
+		return list.slice(startIndex,endIndex)
+	},[ startIndex,endIndex ])
 
+	const stylePadding = useMemo(() => {
+		console.log()
+		return {
+			paddingTop: startIndex * domHeight + 'px',
+			paddingBottom: (list.length - endIndex) * domHeight + 'px',
+		}
+	},[ startIndex,endIndex ])
 
 	return (
 		<div className="wrapper">
+
 			<div className="scrollContainer" ref={ domRef }>
-				{
-					virtualList.map(item => (
-						<Item key={ item.id } { ...item } />
-					))
-				}
+				<div style={ stylePadding }>
+					{
+						virtualList.map(item => (
+							<Item key={ item.id } { ...item } />
+						))
+					}
+				</div>
 			</div>
 		</div>
 	)
