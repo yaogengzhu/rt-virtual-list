@@ -1,4 +1,4 @@
-import React,{ useRef,useEffect } from 'react'
+import React,{ useRef,useEffect,useMemo } from 'react'
 import { data } from './mock'
 import './index.less'
 
@@ -50,11 +50,9 @@ const App = () => {
 			endIndex.current = startIndex.current + itemSize.current
 			// endIndex 需要进行判断
 			if (!list[ endIndex.current ]) {
-				endIndex.current = list.length - 1
+				endIndex.current = list.length
 			}
-
-			console.log(endIndex.current,'xx')
-			console.log(startIndex.current,'xx')
+			console.log(startIndex.current,endIndex.current)
 		}
 
 	}
@@ -73,11 +71,25 @@ const App = () => {
 			window.removeEventListener('resize',computedDevicesHight)
 		}
 	},[])
+
+	useEffect(() => {
+		startIndex.current = 0
+		endIndex.current = itemSize.current
+		console.log(itemSize.current,'domRef')
+	},[ domRef.current ])
+
+	const virtualList = useMemo(() => {
+		console.log(list,'list')
+		console.log(startIndex.current,endIndex.current,'vi')
+		return list.slice(startIndex.current,endIndex.current)
+	},[ startIndex.current, endIndex.current ])
+
+
 	return (
 		<div className="wrapper">
 			<div className="scrollContainer" ref={ domRef }>
 				{
-					list.map(item => (
+					virtualList.map(item => (
 						<Item key={ item.id } { ...item } />
 					))
 				}
