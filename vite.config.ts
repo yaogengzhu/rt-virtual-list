@@ -5,7 +5,7 @@ export default defineConfig({
 	plugins: [
 		react()
 	], // 配置需要使用的插件列表
-	base: '/', // 在生产中服务时的基本公共路径。
+	base: '/rt-virtual-list/', // 在生产中服务时的基本公共路径。
 	css: {
 		// css预处理器
 		preprocessorOptions: {

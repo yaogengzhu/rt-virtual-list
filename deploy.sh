@@ -14,15 +14,15 @@ cd dist
 
 # git init
 # git checkout -b main
-# git add -A
-# git commit -m 'deploy'
+git add -A
+git commit -m 'deploy'
 
 # 如果你要部署在 https://<USERNAME>.github.io
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
 
 
 # 如果你要部署在 https://<USERNAME>.github.io/<REPO>
-# git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
-git push -f git@github.com:yaogengzhu.github.io/rt-virtual-list/
+git push -f git@github.com:yaogengzhu/rt-virtual-list.git main:gh-pages
+# https://github.com/yaogengzhu/rt-virtual-list
 
 cd -
