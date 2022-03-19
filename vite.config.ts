@@ -1,25 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { createHtmlPlugin } from 'vite-plugin-html'
 
 export default defineConfig({
 	plugins: [
-		react(),
-		createHtmlPlugin({
-			minify: true,
-			/**
-			 * After writing entry here, you will not need to add script tags in `index.html`, the original tags need to be deleted
-			 * @default src/main.ts
-			 */
-			entry: 'src/main.tsx',
-			/**
-			 * If you want to store `index.html` in the specified folder, you can modify it, otherwise no configuration is required
-			 * @default index.html
-			 */
-			template: 'public/index.html',
-		})
+		react()
 	], // 配置需要使用的插件列表
-	base: './', // 在生产中服务时的基本公共路径。
+	base: 'https://yaogengzhu.github.io/rt-virtual-list/', // 在生产中服务时的基本公共路径。
 	css: {
 		// css预处理器
 		preprocessorOptions: {
@@ -42,6 +28,14 @@ export default defineConfig({
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/,''),
 			},
+		},
+	},
+	build: {
+		rollupOptions: {
+			external: [
+				"react", // ignore react stuff
+				"react-dom",
+			],
 		},
 	},
 })
