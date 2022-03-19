@@ -4,6 +4,7 @@
 set -e
 
 # git 
+git init
 git add -A
 git commit -m 'deploy'
 
