@@ -31,6 +31,7 @@ const App = () => {
 	const itemSize = useRef(0) // 当前页面可以放置多少个item
 	const deviceHeight = useRef(0) //
 	const domRef = useRef()
+	const timeId = useRef()
 	const { list } = data
 	const computedDevicesHight = () => {
 		const dom = domRef.current
@@ -39,7 +40,7 @@ const App = () => {
 			// 计算一个屏幕可以放下多少item
 			const items = (~~(dom.offsetHeight / domHeight) + 2)
 			itemSize.current = items
-			console.log(items, 'items')
+			console.log(items,'items')
 		}
 	}
 
@@ -77,6 +78,7 @@ const App = () => {
 			} else {
 				setEndIndex(list.length)
 			}
+			autoScrollTop()
 		}
 	},[])
 
@@ -92,6 +94,8 @@ const App = () => {
 		window.addEventListener('resize',computedDevicesHight)
 		return () => {
 			window.removeEventListener('resize',computedDevicesHight)
+			window.removeEventListener('scroll',onScroll)
+			clearInterval(timeId.current)
 		}
 	},[])
 
@@ -107,6 +111,13 @@ const App = () => {
 			paddingBottom: (list.length - endIndex) * domHeight + 'px',
 		}
 	},[ startIndex,endIndex ])
+
+	const autoScrollTop = () => {
+		const dom = domRef.current
+		timeId.current = setInterval(() => {
+			dom.scrollTop++
+		},10)
+	}
 
 	return (
 		<div className="wrapper">
