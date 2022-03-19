@@ -29,13 +29,5 @@ export default defineConfig({
 				rewrite: (path) => path.replace(/^\/api/,''),
 			},
 		},
-	},
-	build: {
-		rollupOptions: {
-			external: [
-				"react", // ignore react stuff
-				"react-dom",
-			],
-		},
-	},
+	}
 })
