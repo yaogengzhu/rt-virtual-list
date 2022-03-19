@@ -43,7 +43,6 @@ const App = () => {
 			console.log(items,'items')
 		}
 	}
-
 	const onScroll = () => {
 		const dom = domRef.current
 		if (dom) {
@@ -60,7 +59,6 @@ const App = () => {
 		}
 
 	}
-
 	/**
 	 * init page
 	 */
@@ -91,6 +89,12 @@ const App = () => {
 				passive: true,
 			})
 		}
+		window.addEventListener('touchstart',() => {
+			clearInterval(timeId.current)
+		})
+		window.addEventListener('touchend', () => {
+			autoScrollTop()
+		})
 		window.addEventListener('resize',computedDevicesHight)
 		return () => {
 			window.removeEventListener('resize',computedDevicesHight)
